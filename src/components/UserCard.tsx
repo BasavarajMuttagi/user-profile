@@ -1,14 +1,21 @@
 import { Envelope, Link, Phone } from "@phosphor-icons/react";
 import { User } from "../types";
+import { useNavigate } from "react-router-dom";
 
-const UserCard = ({ username, email, name, phone, website }: User) => {
+const UserCard = ({ id, username, email, name, phone, website }: User) => {
+  const navigate = useNavigate();
   return (
-    <article className="flex gap-x-2 p-2 items-center text-gray-700 border rounded-md shadow hover:border-gray-300 hover:cursor-pointer md:space-x-5">
-      <img
-        src="https://avatar.iran.liara.run/public"
-        alt={`${name}'s avatar`}
-        className="size-24"
-      />
+    <article
+      onClick={() => navigate(`user/${id}`)}
+      className="flex gap-x-2 p-2 items-center text-gray-700 border rounded-md shadow hover:border-gray-300 hover:cursor-pointer md:space-x-5"
+    >
+      <div className="h-24 w-24 shrink-0">
+        <img
+          src="https://avatar.iran.liara.run/public"
+          alt={`${name}'s avatar`}
+          className="h-full w-full"
+        />
+      </div>
 
       <div className="space-y-1 w-full text-sm">
         <div className="mb-3">

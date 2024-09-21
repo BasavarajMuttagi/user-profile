@@ -36,7 +36,7 @@ const Users = () => {
             <SpinnerGap size={50} className="text-violet-500 animate-spin" />
           </div>
         ) : (
-          users.map((eachUser) => <UserCard {...eachUser} />)
+          users.map((eachUser) => <UserCard key={eachUser.id} {...eachUser} />)
         )}
       </div>
     </div>
