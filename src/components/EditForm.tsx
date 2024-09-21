@@ -6,7 +6,7 @@ const FormSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   phone: z.string().min(10, { message: "Invalid phone number" }),
-  url: z.string().url({ message: "Invalid URL (https://example.com)" }),
+  website: z.string().url({ message: "Invalid URL (https://example.com)" }),
   username: z.string().min(1, { message: "Username is required" }),
 });
 
@@ -19,7 +19,7 @@ const EditForm = ({ email, phone, name, website, username }: User) => {
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { email, phone, name, url: website, username },
+    defaultValues: { email, phone, name, website, username },
   });
 
   const onSubmit = async (data: FormSchemaType) => {
@@ -86,13 +86,15 @@ const EditForm = ({ email, phone, name, website, username }: User) => {
       </div>
 
       <div className="relative pb-3">
-        <label className="block font-medium">URL</label>
+        <label className="block font-medium">Website</label>
         <input
-          {...register("url")}
+          {...register("website")}
           className="px-3 py-1 outline-none border w-full"
         />
-        {errors.url && (
-          <p className="text-red-400 text-xs absolute">{errors.url.message}</p>
+        {errors.website && (
+          <p className="text-red-400 text-xs absolute">
+            {errors.website.message}
+          </p>
         )}
       </div>
 
