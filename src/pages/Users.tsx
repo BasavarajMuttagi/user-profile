@@ -7,37 +7,57 @@ import { SpinnerGap } from "@phosphor-icons/react";
 const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [spin, setSpin] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const getAllUsers = async () => {
     try {
       setSpin(true);
+      setError(null);
       const response = await axios.get(
         "https://jsonplaceholder.typicode.com/users",
       );
       return response;
     } catch (error) {
       console.log(error);
+      setError("Failed to fetch users. Please try again later.");
     } finally {
       setSpin(false);
     }
   };
   useEffect(() => {
     getAllUsers().then((res) => {
-      setUsers(res?.data);
+      if (res) {
+        setUsers(res.data);
+      }
     });
   }, []);
 
+  if (spin) {
+    return (
+      <div className="flex flex-col min-h-screen p-2 justify-center items-center">
+        <div className="text-black font-medium tracking-widest inline-flex items-center text-xl gap-x-5">
+          <span>Loading</span>
+          <SpinnerGap size={50} className="text-violet-500 animate-spin" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col min-h-screen p-2 justify-center items-center">
+        <div className="text-red-500 font-medium text-xl text-center">
+          {error}
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className=" flex flex-col min-h-screen p-2">
+    <div className="flex flex-col min-h-screen p-2">
       <h1 className="text-violet-600 font-extrabold text-3xl mb-6">Users</h1>
-      <div className="space-y-5" style={{ scrollbarWidth: "thin" }}>
-        {spin ? (
-          <div className="text-black font-medium tracking-widest inline-flex items-center text-xl gap-x-5">
-            <span>Loading</span>
-            <SpinnerGap size={50} className="text-violet-500 animate-spin" />
-          </div>
-        ) : (
-          users.map((eachUser) => <UserCard key={eachUser.id} {...eachUser} />)
-        )}
+      <div className="space-y-5">
+        {users.map((eachUser) => (
+          <UserCard key={eachUser.id} {...eachUser} />
+        ))}
       </div>
     </div>
   );
