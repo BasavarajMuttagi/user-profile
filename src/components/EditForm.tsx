@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { updateUser } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import defaultAvatar from "./../assets/default_avatar.webp";
+import toast from "react-hot-toast";
 const FormSchema = z.object({
   id: z.number(),
   avatar: z.string().default(defaultAvatar),
@@ -41,6 +42,7 @@ const EditForm = ({ email, phone, id, name, website, username }: User) => {
     try {
       dispatch(updateUser(data));
       navigate("/");
+      toast.success("User updated");
     } catch (error) {
       console.log(error);
     }

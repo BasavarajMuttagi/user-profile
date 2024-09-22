@@ -5,6 +5,8 @@ import defaultAvatar from "./../assets/default_avatar.webp";
 import { useDispatch } from "react-redux";
 import { ChangeEvent } from "react";
 import { setAvatar } from "../features/users/usersSlice";
+import toast from "react-hot-toast";
+
 const UserCard = ({
   id,
   username,
@@ -16,11 +18,17 @@ const UserCard = ({
 }: User) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      const previewUrl = URL.createObjectURL(e.target.files[0]);
+      const file = e.target.files[0];
+      const validImageTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!validImageTypes.includes(file.type)) {
+        toast.error("Please upload a valid image file (JPG, JPEG, PNG)");
+        return;
+      }
+      const previewUrl = URL.createObjectURL(file);
       dispatch(setAvatar({ previewUrl, id }));
+      toast.success("Image updated");
     }
   };
   return (
@@ -29,13 +37,13 @@ const UserCard = ({
       className="flex gap-x-2 p-2 items-center text-gray-700 border rounded-md shadow hover:border-gray-300 hover:cursor-pointer md:space-x-5"
     >
       <div className="h-24 w-24 shrink-0" onClick={(e) => e.stopPropagation()}>
-        <label htmlFor="fileUpload">
+        <label htmlFor={`fileUpload-${id}`}>
           <input
             type="file"
-            accept="image/*"
+            accept=".jpeg,.jpg,.png"
             onChange={handleFileChange}
             className="hidden"
-            id="fileUpload"
+            id={`fileUpload-${id}`}
           />
           <img
             src={avatar ?? defaultAvatar}
