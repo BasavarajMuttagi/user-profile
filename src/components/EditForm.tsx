@@ -7,20 +7,51 @@ import { updateUser } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import defaultAvatar from "./../assets/default_avatar.webp";
 import toast from "react-hot-toast";
+
 const AddressSchema = z.object({
-  street: z.string().min(1, { message: "Street is required" }),
-  suite: z.string().min(1, { message: "Suite is required" }),
-  city: z.string().min(1, { message: "City is required" }),
-  zipcode: z.string().min(1, { message: "Zipcode is required" }),
+  street: z
+    .string()
+    .min(1, { message: "Street is required" })
+    .max(35, { message: "Street must be at most 35 characters" }),
+  suite: z
+    .string()
+    .min(1, { message: "Suite is required" })
+    .max(35, { message: "Suite must be at most 35 characters" }),
+  city: z
+    .string()
+    .min(1, { message: "City is required" })
+    .max(35, { message: "City must be at most 35 characters" }),
+  zipcode: z
+    .string()
+    .min(4, { message: "Zipcode number must be at least 4 digits" })
+    .max(8, { message: "Zipcode number must be at most 8 digits" })
+    .regex(/^\d+$/, { message: "Zipcode number must contain only numbers" }),
 });
+
 const FormSchema = z.object({
   id: z.number(),
   avatar: z.string().default(defaultAvatar),
-  name: z.string().min(1, { message: "Name is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-  phone: z.string().min(10, { message: "Invalid phone number" }),
-  website: z.string().url({ message: "Invalid URL (https://example.com)" }),
-  username: z.string().min(1, { message: "Username is required" }),
+  name: z
+    .string()
+    .min(1, { message: "Name is required" })
+    .max(35, { message: "Name must be at most 35 characters" }),
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .max(100, { message: "Email must be at most 100 characters" }),
+  phone: z
+    .string()
+    .min(10, { message: "Phone number must be at least 10 digits" })
+    .max(14, { message: "Phone number must be at most 14 digits" })
+    .regex(/^\d+$/, { message: "Phone number must contain only numbers" }),
+  website: z
+    .string()
+    .url({ message: "Invalid URL (https://example.com)" })
+    .max(100, { message: "Website URL must be at most 100 characters" }),
+  username: z
+    .string()
+    .min(1, { message: "Username is required" })
+    .max(35, { message: "Username must be at most 35 characters" }),
   address: AddressSchema,
 });
 
