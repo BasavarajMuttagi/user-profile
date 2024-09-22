@@ -1,20 +1,48 @@
 import { Envelope, Link, Phone } from "@phosphor-icons/react";
 import { User } from "../types";
 import { useNavigate } from "react-router-dom";
-
-const UserCard = ({ id, username, email, name, phone, website }: User) => {
+import defaultAvatar from "./../assets/default_avatar.webp";
+import { useDispatch } from "react-redux";
+import { ChangeEvent } from "react";
+import { setAvatar } from "../features/users/usersSlice";
+const UserCard = ({
+  id,
+  username,
+  email,
+  name,
+  phone,
+  website,
+  avatar,
+}: User) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const previewUrl = URL.createObjectURL(e.target.files[0]);
+      dispatch(setAvatar({ previewUrl, id }));
+    }
+  };
   return (
     <article
       onClick={() => navigate(`user/${id}`)}
       className="flex gap-x-2 p-2 items-center text-gray-700 border rounded-md shadow hover:border-gray-300 hover:cursor-pointer md:space-x-5"
     >
-      <div className="h-24 w-24 shrink-0">
-        <img
-          src="https://avatar.iran.liara.run/public"
-          alt={`${name}'s avatar`}
-          className="h-full w-full"
-        />
+      <div className="h-24 w-24 shrink-0" onClick={(e) => e.stopPropagation()}>
+        <label htmlFor="fileUpload">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="hidden"
+            id="fileUpload"
+          />
+          <img
+            src={avatar ?? defaultAvatar}
+            alt={`${name}'s avatar`}
+            className="h-full w-full rounded-full object-cover object-top"
+          />
+        </label>
       </div>
 
       <div className="space-y-1 w-full text-sm">

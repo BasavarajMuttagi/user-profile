@@ -14,10 +14,10 @@ const usersSlice = createSlice({
   reducers: {
     updateUser(
       state,
-      action: PayloadAction<Omit<User, "address" | "company">>
+      action: PayloadAction<Omit<User, "address" | "company">>,
     ) {
       const index = state.users.findIndex(
-        (user) => user.id === action.payload.id
+        (user) => user.id === action.payload.id,
       );
       if (index !== -1) {
         state.users[index] = { ...state.users[index], ...action.payload };
@@ -29,10 +29,10 @@ const usersSlice = createSlice({
 
     setAvatar(
       state,
-      action: PayloadAction<{ previewUrl: string; id: number }>
+      action: PayloadAction<{ previewUrl: string; id: number }>,
     ) {
       const index = state.users.findIndex(
-        (user) => user.id === action.payload.id
+        (user) => user.id === action.payload.id,
       );
       if (index !== -1) {
         state.users[index] = {

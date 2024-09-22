@@ -2,7 +2,13 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "../types";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../features/users/usersSlice";
+import { useNavigate } from "react-router-dom";
+import defaultAvatar from "./../assets/default_avatar.webp";
 const FormSchema = z.object({
+  id: z.number(),
+  avatar: z.string().default(defaultAvatar),
   name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   phone: z.string().min(10, { message: "Invalid phone number" }),
@@ -12,19 +18,29 @@ const FormSchema = z.object({
 
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-const EditForm = ({ email, phone, name, website, username }: User) => {
+const EditForm = ({ email, phone, id, name, website, username }: User) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { email, phone, name, website, username },
+    defaultValues: {
+      email,
+      phone,
+      name,
+      website,
+      username,
+      id,
+    },
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    console.log("Form Data:", data);
     try {
+      dispatch(updateUser(data));
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
