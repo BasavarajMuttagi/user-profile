@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import UserCard from "../components/UserCard";
-import { User } from "../types";
 import axios from "axios";
 import { SpinnerGap } from "@phosphor-icons/react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUsers } from "../features/users/usersSlice";
+import { RootState } from "../store/store";
 
 const Users = () => {
-  const [users, setUsers] = useState<User[]>([]);
+  const dispatch = useDispatch();
+  const users = useSelector((state: RootState) => state.users.users);
   const [spin, setSpin] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const getAllUsers = async () => {
@@ -24,11 +27,13 @@ const Users = () => {
     }
   };
   useEffect(() => {
-    getAllUsers().then((res) => {
-      if (res) {
-        setUsers(res.data);
-      }
-    });
+    if (users.length === 0) {
+      getAllUsers().then((res) => {
+        if (res) {
+          dispatch(setUsers(res.data));
+        }
+      });
+    }
   }, []);
 
   if (spin) {
