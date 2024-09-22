@@ -12,20 +12,38 @@ const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    updateUser(state, action: PayloadAction<User>) {
+    updateUser(
+      state,
+      action: PayloadAction<Omit<User, "address" | "company">>
+    ) {
       const index = state.users.findIndex(
-        (user) => user.id === action.payload.id,
+        (user) => user.id === action.payload.id
       );
       if (index !== -1) {
-        state.users[index] = action.payload;
+        state.users[index] = { ...state.users[index], ...action.payload };
       }
     },
     setUsers(state, action: PayloadAction<User[]>) {
       state.users = action.payload;
     },
+
+    setAvatar(
+      state,
+      action: PayloadAction<{ previewUrl: string; id: number }>
+    ) {
+      const index = state.users.findIndex(
+        (user) => user.id === action.payload.id
+      );
+      if (index !== -1) {
+        state.users[index] = {
+          ...state.users[index],
+          avatar: action.payload.previewUrl,
+        };
+      }
+    },
   },
 });
 
-export const { updateUser, setUsers } = usersSlice.actions;
+export const { updateUser, setUsers, setAvatar } = usersSlice.actions;
 
 export default usersSlice.reducer;
