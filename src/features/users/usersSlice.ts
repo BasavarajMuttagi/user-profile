@@ -12,10 +12,7 @@ const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    updateUser(
-      state,
-      action: PayloadAction<Omit<User, "address" | "company">>,
-    ) {
+    updateUser(state, action: PayloadAction<Omit<User, "company">>) {
       const index = state.users.findIndex(
         (user) => user.id === action.payload.id,
       );

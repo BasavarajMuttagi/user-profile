@@ -34,7 +34,7 @@ const Users = () => {
         }
       });
     }
-  }, []);
+  }, [dispatch, users.length]);
 
   if (spin) {
     return (

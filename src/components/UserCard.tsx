@@ -1,4 +1,4 @@
-import { Envelope, Link, Phone } from "@phosphor-icons/react";
+import { Envelope, Link, MapPinLine, Phone } from "@phosphor-icons/react";
 import { User } from "../types";
 import { useNavigate } from "react-router-dom";
 import defaultAvatar from "./../assets/default_avatar.webp";
@@ -15,6 +15,7 @@ const UserCard = ({
   phone,
   website,
   avatar,
+  address,
 }: User) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -83,6 +84,15 @@ const UserCard = ({
               {website}
             </a>
           </div>
+        </div>
+        <div className="mt-3 text-sm text-gray-600 inline-flex">
+          <MapPinLine
+            size={18}
+            color="gray-600"
+            className="mr-2 shrink-0"
+            weight="bold"
+          />
+          {address.street}, {address.suite}, {address.city}, {address.zipcode}
         </div>
       </div>
     </article>

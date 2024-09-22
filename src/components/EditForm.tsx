@@ -7,6 +7,12 @@ import { updateUser } from "../features/users/usersSlice";
 import { useNavigate } from "react-router-dom";
 import defaultAvatar from "./../assets/default_avatar.webp";
 import toast from "react-hot-toast";
+const AddressSchema = z.object({
+  street: z.string().min(1, { message: "Street is required" }),
+  suite: z.string().min(1, { message: "Suite is required" }),
+  city: z.string().min(1, { message: "City is required" }),
+  zipcode: z.string().min(1, { message: "Zipcode is required" }),
+});
 const FormSchema = z.object({
   id: z.number(),
   avatar: z.string().default(defaultAvatar),
@@ -15,11 +21,21 @@ const FormSchema = z.object({
   phone: z.string().min(10, { message: "Invalid phone number" }),
   website: z.string().url({ message: "Invalid URL (https://example.com)" }),
   username: z.string().min(1, { message: "Username is required" }),
+  address: AddressSchema,
 });
 
-type FormSchemaType = z.infer<typeof FormSchema>;
+export type FormSchemaType = z.infer<typeof FormSchema>;
 
-const EditForm = ({ email, phone, id, name, website, username }: User) => {
+const EditForm = ({
+  email,
+  phone,
+  id,
+  name,
+  website,
+  username,
+  address,
+  avatar,
+}: User) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const {
@@ -35,6 +51,8 @@ const EditForm = ({ email, phone, id, name, website, username }: User) => {
       website,
       username,
       id,
+      address,
+      avatar,
     },
   });
 
@@ -112,6 +130,62 @@ const EditForm = ({ email, phone, id, name, website, username }: User) => {
         {errors.website && (
           <p className="text-red-400 text-xs absolute">
             {errors.website.message}
+          </p>
+        )}
+      </div>
+
+      <div className="relative pb-3">
+        <label className="block font-medium">Street</label>
+        <input
+          type="text"
+          {...register("address.street")}
+          className="px-3 py-1 outline-none border w-full"
+        />
+        {errors.address?.street && (
+          <p className="text-red-400 text-xs absolute">
+            {errors.address.street.message}
+          </p>
+        )}
+      </div>
+
+      <div className="relative pb-3">
+        <label className="block font-medium">Suite</label>
+        <input
+          type="text"
+          {...register("address.suite")}
+          className="px-3 py-1 outline-none border w-full"
+        />
+        {errors.address?.suite && (
+          <p className="text-red-400 text-xs absolute">
+            {errors.address.suite.message}
+          </p>
+        )}
+      </div>
+
+      <div className="relative pb-3">
+        <label className="block font-medium">City</label>
+        <input
+          type="text"
+          {...register("address.city")}
+          className="px-3 py-1 outline-none border w-full"
+        />
+        {errors.address?.city && (
+          <p className="text-red-400 text-xs absolute">
+            {errors.address.city.message}
+          </p>
+        )}
+      </div>
+
+      <div className="relative pb-3">
+        <label className="block font-medium">Zipcode</label>
+        <input
+          type="text"
+          {...register("address.zipcode")}
+          className="px-3 py-1 outline-none border w-full"
+        />
+        {errors.address?.zipcode && (
+          <p className="text-red-400 text-xs absolute">
+            {errors.address.zipcode.message}
           </p>
         )}
       </div>
